@@ -11,7 +11,9 @@
   "author": "Jens Rømer Hesselbjerg",
   "type": "module",
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "dev": "vite",
+    "generate-fixture-report": "node scripts/generate-fixture-report.ts",
+    "typecheck": "tsc",
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
@@ -23,7 +25,8 @@
     "oxfmt": "0.77.0",
     "oxlint": "1.92.0",
     "oxlint-tsgolint": "7.0.2006",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "vite": "8.3.8"
   },
   "peerDependencies": {
     "@playwright/test": "^1.40"

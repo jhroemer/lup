@@ -3,7 +3,9 @@
     "target": "es2022",
     "module": "node18",
     "moduleResolution": "node16",
-    "types": ["node"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": ["node", "vite/client"],
     "declaration": true,
     "outDir": "./lib",
     "rootDir": ".",
@@ -17,5 +19,12 @@
     "skipLibCheck": true,
     "sourceMap": false
   },
-  "include": ["src", "tests", "test-project", "playwright.config.ts"]
+  "include": [
+    "src",
+    "scripts",
+    "tests",
+    "fixture-project",
+    "playwright.config.ts",
+    "vite.config.ts"
+  ]
 }

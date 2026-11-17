@@ -4,5 +4,5 @@ export default defineConfig({
   testDir: "tests",
   globalSetup: "./tests/global-setup.ts",
   ignoreSnapshots: !process.env.CI,
-  reporter: [["list"], ["./src/reporter.ts"]],
+  reporter: [["list"], ["./src/reporter/reporter.ts"]],
 });

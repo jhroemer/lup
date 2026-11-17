@@ -9,60 +9,9 @@ import type {
 } from "@playwright/test/reporter";
 import { readFileSync, writeFileSync } from "node:fs";
 import { relative } from "node:path";
+import type { Attempt, Base64Png, Report, ScreenshotComparison } from "../report.ts";
 
 type Attachment = TestResult["attachments"][number];
-
-type Base64Png = string & { readonly __brand: "Base64Png" };
-
-type ScreenshotComparison =
-  | {
-      kind: "mismatch";
-      name: string;
-      expected: Base64Png;
-      actual: Base64Png;
-      diff: Base64Png;
-    }
-  | {
-      kind: "missing";
-      name: string;
-      actual: Base64Png;
-    }
-  | {
-      kind: "unstable";
-      name: string;
-      previous: Base64Png;
-      actual: Base64Png;
-      diff: Base64Png;
-      expected: Base64Png | null;
-    }
-  | {
-      kind: "unrecognized";
-      name: string;
-      attachmentNames: string[];
-    };
-
-type Attempt = {
-  retry: number;
-  status: TestResult["status"];
-  comparisons: ScreenshotComparison[];
-};
-
-type TestEntry = {
-  id: string;
-  titlePath: string[];
-  projectName: string;
-  relativeFile: string;
-  line: number;
-  outcome: ReturnType<TestCase["outcome"]>;
-  attempts: Attempt[];
-};
-
-type Report = {
-  status: FullResult["status"];
-  startTime: string;
-  durationMs: number;
-  tests: TestEntry[];
-};
 
 type AttachmentGroup = { paths: Map<string, string>; attachmentNames: string[] };
 
@@ -125,6 +74,7 @@ function toScreenshotComparison(
   return { kind: "unrecognized", name, attachmentNames };
 }
 
+// TODO: attach to html when playwright runs
 function renderReport(report: Report): void {
   document.body.append(
     Object.assign(document.createElement("h1"), { textContent: "Screenshot report" }),
@@ -199,6 +149,7 @@ function renderReport(report: Report): void {
 }
 
 function renderHtml(report: Report): string {
+  // TODO: don't inline the html anymore
   const reportJson = JSON.stringify(report).replaceAll("<", "\\u003c");
   return `<!doctype html>
 <html lang="en">
@@ -262,6 +213,7 @@ class ScreenshotReporter implements Reporter {
       })),
     };
     // TODO: use output path from config
+    // TODO: only write the data, the UI folder takes care of rendering
     writeFileSync("screenshot-report.html", renderHtml(report), { encoding: "utf8" });
   }
 }
