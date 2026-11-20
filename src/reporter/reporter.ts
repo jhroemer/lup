@@ -8,7 +8,7 @@ import type {
   TestResult,
 } from "@playwright/test/reporter";
 import { readFileSync, writeFileSync } from "node:fs";
-import { relative } from "node:path";
+import { relative, resolve } from "node:path";
 import type { Attempt, Base64Png, Report, ScreenshotComparison } from "../report.ts";
 
 type Attachment = TestResult["attachments"][number];
@@ -19,6 +19,8 @@ const COMPARISON_ATTACHMENT_NAME =
   /^(?<base>.+)-(?<role>expected|actual|diff|previous)(?<extension>\.png)$/;
 
 const BASE64_PNG_SIGNATURE = "iVBORw0KGgo";
+
+const UI_HTML_PATH = resolve(import.meta.dirname, "../../dist/ui/index.html");
 
 function isBase64Png(value: string): value is Base64Png {
   return value.startsWith(BASE64_PNG_SIGNATURE);
@@ -74,104 +76,12 @@ function toScreenshotComparison(
   return { kind: "unrecognized", name, attachmentNames };
 }
 
-// TODO: attach to html when playwright runs
-function renderReport(report: Report): void {
-  document.body.append(
-    Object.assign(document.createElement("h1"), { textContent: "Screenshot report" }),
-  );
-  for (const test of report.tests) {
-    const section = document.createElement("section");
-    section.append(
-      Object.assign(document.createElement("h2"), {
-        textContent: test.titlePath.filter(Boolean).join(" › "),
-      }),
-    );
-    for (const attempt of test.attempts) {
-      section.append(
-        Object.assign(document.createElement("h3"), {
-          textContent: `Attempt ${attempt.retry + 1}: ${attempt.status}`,
-        }),
-      );
-      for (const comparison of attempt.comparisons) {
-        section.append(
-          Object.assign(document.createElement("h4"), {
-            textContent: `${comparison.name} (${comparison.kind})`,
-          }),
-        );
-        let images: [label: string, png: Base64Png][];
-        switch (comparison.kind) {
-          case "mismatch":
-            images = [
-              ["expected", comparison.expected],
-              ["actual", comparison.actual],
-              ["diff", comparison.diff],
-            ];
-            break;
-          case "missing":
-            images = [["actual", comparison.actual]];
-            break;
-          case "unstable":
-            images = [
-              ["previous", comparison.previous],
-              ["actual", comparison.actual],
-              ["diff", comparison.diff],
-            ];
-            if (comparison.expected) images.unshift(["expected", comparison.expected]);
-            break;
-          case "unrecognized":
-            images = [];
-            section.append(
-              Object.assign(document.createElement("p"), {
-                textContent: `Unrecognized attachments: ${comparison.attachmentNames.join(", ")}`,
-              }),
-            );
-            break;
-          default:
-            images = comparison satisfies never;
-        }
-        const figures = Object.assign(document.createElement("div"), { className: "figures" });
-        for (const [label, png] of images) {
-          const figure = document.createElement("figure");
-          figure.append(
-            Object.assign(document.createElement("img"), {
-              alt: `${comparison.name} ${label}`,
-              src: `data:image/png;base64,${png}`,
-            }),
-            Object.assign(document.createElement("figcaption"), { textContent: label }),
-          );
-          figures.append(figure);
-        }
-        section.append(figures);
-      }
-    }
-    document.body.append(section);
-  }
-}
-
 function renderHtml(report: Report): string {
-  // TODO: don't inline the html anymore
+  const uiHtml = readFileSync(UI_HTML_PATH, "utf8");
+  const bodyEnd = uiHtml.lastIndexOf("</body>");
+  if (bodyEnd === -1) throw new Error(`No </body> found in ${UI_HTML_PATH}`);
   const reportJson = JSON.stringify(report).replaceAll("<", "\\u003c");
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Screenshot report</title>
-<style>
-.figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
-figure { margin: 0; }
-img { display: block; width: 100%; height: auto; border: 1px solid #ccc; }
-</style>
-</head>
-<body>
-<script type="application/json" id="report">${reportJson}</script>
-<script type="module">
-${renderReport.toString()}
-const report = JSON.parse(document.getElementById("report").textContent);
-renderReport(report);
-</script>
-</body>
-</html>
-`;
+  return `${uiHtml.slice(0, bodyEnd)}<script type="application/json" id="report">${reportJson}</script>\n${uiHtml.slice(bodyEnd)}`;
 }
 
 class ScreenshotReporter implements Reporter {
@@ -213,7 +123,6 @@ class ScreenshotReporter implements Reporter {
       })),
     };
     // TODO: use output path from config
-    // TODO: only write the data, the UI folder takes care of rendering
     writeFileSync("screenshot-report.html", renderHtml(report), { encoding: "utf8" });
   }
 }
