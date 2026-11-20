@@ -12,6 +12,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "build": "vite build",
     "generate-fixture-report": "node scripts/generate-fixture-report.ts",
     "typecheck": "tsc",
     "lint": "oxlint",

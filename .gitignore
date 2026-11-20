@@ -1,6 +1,6 @@
 node_modules/
 test-results/
 playwright-report/
-/lib/
+/dist/
 screenshot-report.html
 fixture-project/tests/__screenshots__/

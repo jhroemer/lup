@@ -18,6 +18,10 @@ function readFixtureReportJson(): string {
 
 export default defineConfig({
   root: "src/ui",
+  build: {
+    outDir: path.resolve(import.meta.dirname, "dist/ui"),
+    emptyOutDir: true,
+  },
   plugins: [
     {
       name: "inject-fixture-report",
@@ -30,6 +34,41 @@ export default defineConfig({
           injectTo: "body-prepend",
         },
       ],
+    },
+    {
+      name: "inline-assets",
+      generateBundle: {
+        order: "post",
+        handler: (_options, bundle) => {
+          const html = bundle["index.html"];
+          if (html?.type !== "asset") throw new Error("index.html is missing from the bundle");
+
+          html.source = String(html.source)
+            .replace(
+              /<script type="module" crossorigin src="\/(.+?)"><\/script>/,
+              (_match, fileName: string) => {
+                const js = bundle[fileName];
+                if (js?.type !== "chunk") throw new Error(`${fileName} is not a JS chunk`);
+                delete bundle[fileName];
+                return `<script type="module">${js.code.replaceAll("</script", "<\\/script")}</script>`;
+              },
+            )
+            .replace(
+              /<link rel="stylesheet" crossorigin href="\/(.+?)">/,
+              (_match, fileName: string) => {
+                const css = bundle[fileName];
+                if (css?.type !== "asset") throw new Error(`${fileName} is not a CSS asset`);
+                delete bundle[fileName];
+                return `<style>${String(css.source)}</style>`;
+              },
+            );
+
+          const notInlined = Object.keys(bundle).filter((fileName) => fileName !== "index.html");
+          if (notInlined.length > 0) {
+            throw new Error(`Expected a single index.html, also got ${notInlined.join(", ")}`);
+          }
+        },
+      },
     },
   ],
 });
