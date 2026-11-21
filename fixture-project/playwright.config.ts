@@ -6,7 +6,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 1,
   globalTimeout: 60 * 60 * 1000,
-  reporter: "../src/reporter/reporter.ts",
+  reporter: "../dist/reporter/reporter.js",
   snapshotPathTemplate: "{testDir}/__screenshots__/{arg}{ext}",
   use: {
     trace: "on-first-retry",
