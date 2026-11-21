@@ -1,5 +1,5 @@
 {
-  "name": "playwright-screenshot-reporter",
+  "name": "lup-reporter",
   "version": "0.0.1",
   "private": true,
   "description": "A Playwright reporter for smooth screenshot reviews.",
