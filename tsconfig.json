@@ -7,8 +7,6 @@
     "noEmit": true,
     "types": ["node", "vite/client"],
     "declaration": true,
-    "outDir": "./lib",
-    "rootDir": ".",
     "isolatedModules": true,
     "isolatedDeclarations": false,
     "erasableSyntaxOnly": true,
