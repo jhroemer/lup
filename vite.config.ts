@@ -18,9 +18,24 @@ function readFixtureReportJson(): string {
 
 export default defineConfig({
   root: "src/ui",
-  build: {
-    outDir: path.resolve(import.meta.dirname, "dist/ui"),
-    emptyOutDir: true,
+  builder: {},
+  environments: {
+    client: {
+      build: {
+        outDir: path.resolve(import.meta.dirname, "dist/ui"),
+        emptyOutDir: true,
+      },
+    },
+    reporter: {
+      consumer: "server",
+      build: {
+        outDir: path.resolve(import.meta.dirname, "dist/reporter"),
+        emptyOutDir: true,
+        rolldownOptions: {
+          input: path.resolve(import.meta.dirname, "src/reporter/reporter.ts"),
+        },
+      },
+    },
   },
   plugins: [
     {
@@ -37,6 +52,7 @@ export default defineConfig({
     },
     {
       name: "inline-assets",
+      applyToEnvironment: (environment) => environment.name === "client",
       generateBundle: {
         order: "post",
         handler: (_options, bundle) => {

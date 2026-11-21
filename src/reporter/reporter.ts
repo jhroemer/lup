@@ -20,7 +20,7 @@ const COMPARISON_ATTACHMENT_NAME =
 
 const BASE64_PNG_SIGNATURE = "iVBORw0KGgo";
 
-const UI_HTML_PATH = resolve(import.meta.dirname, "../../dist/ui/index.html");
+const UI_HTML_PATH = resolve(import.meta.dirname, "../ui/index.html");
 
 function isBase64Png(value: string): value is Base64Png {
   return value.startsWith(BASE64_PNG_SIGNATURE);
