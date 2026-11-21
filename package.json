@@ -5,7 +5,11 @@
   "description": "A Playwright reporter for smooth screenshot reviews.",
   "keywords": [
     "playwright",
-    "test"
+    "playwright-reporter",
+    "reporter",
+    "screenshot",
+    "test",
+    "visual-regression"
   ],
   "license": "MIT",
   "author": "Jens Rømer Hesselbjerg",
