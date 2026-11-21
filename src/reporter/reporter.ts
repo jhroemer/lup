@@ -9,7 +9,7 @@ import type {
 } from "@playwright/test/reporter";
 import { readFileSync, writeFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
-import type { Attempt, Base64Png, Report, ScreenshotComparison } from "../report.ts";
+import type { Attempt, Base64Png, Report, ScreenshotComparison } from "../types.ts";
 
 type Attachment = TestResult["attachments"][number];
 

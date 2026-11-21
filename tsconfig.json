@@ -1,28 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "es2022",
-    "module": "node18",
-    "moduleResolution": "node16",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "types": ["node", "vite/client"],
-    "declaration": true,
-    "isolatedModules": true,
-    "isolatedDeclarations": false,
-    "erasableSyntaxOnly": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "skipLibCheck": true,
-    "sourceMap": false
-  },
-  "include": [
-    "src",
-    "scripts",
-    "tests",
-    "fixture-project",
-    "playwright.config.ts",
-    "vite.config.ts"
-  ]
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }

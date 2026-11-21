@@ -18,7 +18,7 @@
     "dev": "vite",
     "build": "vite build",
     "generate-fixture-report": "npm run build && node scripts/generate-fixture-report.ts",
-    "typecheck": "tsc",
+    "typecheck": "tsc -b",
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",

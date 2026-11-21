@@ -1,4 +1,4 @@
-import type { Base64Png, Report } from "../report.ts";
+import type { Base64Png, Report } from "../types.ts";
 import "./style.css";
 
 function renderReport(report: Report): DocumentFragment {
