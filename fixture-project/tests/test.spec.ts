@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 test("test sample html", async ({ page }) => {
   const htmlUrl = new URL("../index.html", import.meta.url).href;
   await page.goto(htmlUrl);
-  if (process.env.FIXTURE_VARIANT === "baseline") {
-    await page.locator("body").evaluate((body) => (body.textContent = "hello baseline"));
+  if (process.env.FIXTURE_VARIANT === "changed") {
+    await page.locator("body").evaluate((body) => (body.textContent = "hello changed world"));
   }
   await expect(page).toHaveScreenshot("test.png");
 
