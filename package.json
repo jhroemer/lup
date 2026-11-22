@@ -1,7 +1,6 @@
 {
   "name": "lup-reporter",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.0.0-dev",
   "description": "A Playwright reporter for smooth screenshot reviews.",
   "keywords": [
     "playwright",
@@ -13,7 +12,15 @@
   ],
   "license": "MIT",
   "author": "Jens Rømer Hesselbjerg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhroemer/lup.git"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "exports": "./dist/reporter/reporter.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -35,5 +42,8 @@
   },
   "peerDependencies": {
     "@playwright/test": "^1.40"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
