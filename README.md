@@ -1,6 +1,12 @@
-# Playwright screenshot reporter
+# lup-reporter
 
 WIP
+
+## Install
+
+```sh
+npm install --save-dev lup-reporter
+```
 
 ## License
 
