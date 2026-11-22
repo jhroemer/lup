@@ -14,7 +14,7 @@
   "author": "Jens Rømer Hesselbjerg",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jhroemer/lup.git"
+    "url": "git+https://github.com/jhroemer/lup-reporter.git"
   },
   "files": [
     "dist"
