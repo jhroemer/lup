@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
 
-const FIXTURE_REPORT = path.resolve(import.meta.dirname, "fixture-project/screenshot-report.html");
+const FIXTURE_REPORT = path.resolve(import.meta.dirname, "fixture-project/lup-report/index.html");
 
 function readFixtureReportJson(): string {
   if (!existsSync(FIXTURE_REPORT)) {

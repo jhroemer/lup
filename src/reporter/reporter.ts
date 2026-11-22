@@ -7,8 +7,8 @@ import type {
   TestError,
   TestResult,
 } from "@playwright/test/reporter";
-import { readFileSync, writeFileSync } from "node:fs";
-import { relative, resolve } from "node:path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
 import type { Attempt, Base64Png, Report, ScreenshotComparison } from "../types.ts";
 
 type Attachment = TestResult["attachments"][number];
@@ -84,12 +84,21 @@ function renderHtml(report: Report): string {
   return `${uiHtml.slice(0, bodyEnd)}<script type="application/json" id="report">${reportJson}</script>\n${uiHtml.slice(bodyEnd)}`;
 }
 
+function findPackageJsonDir(dir: string): string | undefined {
+  if (existsSync(join(dir, "package.json"))) return dir;
+  const parent = dirname(dir);
+  return parent === dir ? undefined : findPackageJsonDir(parent);
+}
+
 class ScreenshotReporter implements Reporter {
   private rootDir = "";
+  private outputDir = "";
   private tests = new Map<string, { test: TestCase; attempts: Attempt[] }>();
 
   onBegin(config: FullConfig, suite: Suite) {
     this.rootDir = config.rootDir;
+    const configDir = config.configFile ? dirname(config.configFile) : process.cwd();
+    this.outputDir = join(findPackageJsonDir(configDir) ?? process.cwd(), "lup-report");
     for (const test of suite.allTests()) {
       this.tests.set(test.id, { test, attempts: [] });
     }
@@ -123,7 +132,8 @@ class ScreenshotReporter implements Reporter {
       })),
     };
     // TODO: use output path from config
-    writeFileSync("screenshot-report.html", renderHtml(report), { encoding: "utf8" });
+    mkdirSync(this.outputDir, { recursive: true });
+    writeFileSync(join(this.outputDir, "index.html"), renderHtml(report), { encoding: "utf8" });
   }
 }
 
