@@ -10,6 +10,8 @@ updates:
       dependencies:
         patterns:
           - "*"
+        exclude-patterns:
+          - "@playwright/test"
         update-types:
           - minor
           - patch
