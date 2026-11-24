@@ -17,33 +17,34 @@
   --bg: var(--gray1);
   --fg: var(--gray12);
   --fg-muted: var(--gray11);
+  --bg-subtle: var(--gray2);
+  --bg-hover: var(--gray3);
+  --bg-selected: var(--gray4);
   --border: var(--gray6);
+  --border-hover: var(--gray8);
+  --accent: light-dark(#5b5bd6, #9e9eff);
 }
 
 body {
-  margin: 2rem;
+  margin: 0;
   background: var(--bg);
   color: var(--fg);
   font-family: system-ui, sans-serif;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
-.figures {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-figure {
+h1 {
   margin: 0;
+  font-size: 1rem;
 }
 
-figcaption {
-  color: var(--fg-muted);
-}
-
-img {
-  display: block;
-  width: 100%;
-  border: 1px solid var(--border);
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
 }

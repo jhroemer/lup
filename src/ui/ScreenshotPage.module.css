@@ -1,0 +1,38 @@
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  align-items: baseline;
+  margin: 0 0 1rem;
+  color: var(--fg-muted);
+
+  code {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 0.8125rem;
+  }
+}
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  figure {
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  figcaption {
+    padding: 0.375rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-subtle);
+    color: var(--fg-muted);
+  }
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}
