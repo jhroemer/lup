@@ -37,7 +37,8 @@ export type Attempt = {
 
 export type TestEntry = {
   id: string;
-  titlePath: string[];
+  title: string;
+  describeTitles: string[];
   projectName: string;
   relativeFile: string;
   line: number;

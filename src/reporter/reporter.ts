@@ -90,6 +90,12 @@ function findPackageJsonDir(dir: string): string | undefined {
   return parent === dir ? undefined : findPackageJsonDir(parent);
 }
 
+function describeTitles(suite: Suite | undefined): string[] {
+  if (suite?.type !== "describe") return [];
+  const outer = describeTitles(suite.parent);
+  return suite.title ? [...outer, suite.title] : outer;
+}
+
 class ScreenshotReporter implements Reporter {
   private rootDir = "";
   private outputDir = "";
@@ -123,7 +129,8 @@ class ScreenshotReporter implements Reporter {
       durationMs: result.duration,
       tests: [...this.tests.values()].map(({ test, attempts }) => ({
         id: test.id,
-        titlePath: test.titlePath(),
+        title: test.title,
+        describeTitles: describeTitles(test.parent),
         projectName: test.parent.project()?.name ?? "",
         relativeFile: relative(this.rootDir, test.location.file),
         line: test.location.line,

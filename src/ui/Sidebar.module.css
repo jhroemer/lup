@@ -39,5 +39,18 @@
       background: var(--bg-selected);
       color: var(--fg);
     }
+
+    &.overview {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      color: var(--fg);
+      font-weight: 500;
+
+      svg {
+        color: var(--fg-muted);
+      }
+    }
   }
 }
