@@ -1,0 +1,19 @@
+.app {
+  display: grid;
+  grid-template-columns: 17rem minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100vh;
+}
+
+.topbar {
+  grid-column: 1 / -1;
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+  font-weight: 600;
+}
+
+.main {
+  padding: 1rem;
+  overflow: auto;
+}

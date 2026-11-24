@@ -4,5 +4,5 @@ import { pathToFileURL } from "node:url";
 
 test("renders failing screenshots", async ({ page }) => {
   await page.goto(pathToFileURL(path.resolve("fixture-project/lup-report/index.html")).href);
-  await expect(page).toHaveScreenshot("report.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("report.png");
 });
