@@ -1,30 +1,34 @@
-import type { Report } from "../types.ts";
+import { useEffect, useState } from "preact/hooks";
 import styles from "./App.module.css";
 import { OverviewPage } from "./OverviewPage.tsx";
 import type { Screenshot } from "./screenshot.ts";
 import { ScreenshotPage } from "./ScreenshotPage.tsx";
+import { parseScreenshotUrl } from "./screenshotUrl.ts";
 import { Sidebar } from "./Sidebar.tsx";
 
-export function App({ report }: { report: Report }) {
-  const screenshots: Screenshot[] = report.tests.flatMap((test) => {
-    const comparisons = test.attempts.at(-1)?.comparisons ?? [];
-    return comparisons.map((comparison) => ({ test, comparison }));
-  });
+export function App({ screenshots }: { screenshots: Screenshot[] }) {
+  const [hash, setHash] = useState(location.hash);
 
-  const selectedIndex = location.hash.match(/^#\/(\d+)$/)?.[1];
-  const selected = selectedIndex === undefined ? undefined : screenshots[Number(selectedIndex)];
+  useEffect(() => {
+    const onHashChange = () => setHash(location.hash);
+    addEventListener("hashchange", onHashChange);
+    return () => removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  const { index, mode } = parseScreenshotUrl(hash);
+  const selected = index === undefined ? undefined : screenshots[index];
 
   return (
     <div class={styles.app}>
       <header class={styles.topbar}>
         <a href="#/">lup</a>
       </header>
-      <Sidebar screenshots={screenshots} selected={selected} />
+      <Sidebar screenshots={screenshots} selected={selected} mode={mode} />
       <main class={styles.main}>
         {selected ? (
-          <ScreenshotPage screenshot={selected} />
+          <ScreenshotPage screenshot={selected} mode={mode} />
         ) : (
-          <OverviewPage screenshots={screenshots} />
+          <OverviewPage screenshots={screenshots} mode={mode} />
         )}
       </main>
     </div>

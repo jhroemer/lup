@@ -1,18 +1,25 @@
 import { expect, test } from "@playwright/test";
 
-test("test sample html", async ({ page }) => {
-  const htmlUrl = new URL("../index.html", import.meta.url).href;
+const isBaselineRun = process.env.FIXTURE_RUN === "baseline";
+const htmlUrl = new URL("../index.html", import.meta.url).href;
+
+test("mismatch", async ({ page }) => {
   await page.goto(htmlUrl);
-  if (process.env.FIXTURE_VARIANT === "changed") {
+  // Change the page, to force a diff against the baseline
+  if (!isBaselineRun) {
     await page.locator("body").evaluate((body) => (body.textContent = "hello changed world"));
   }
-  await expect(page).toHaveScreenshot("test.png");
+  await expect(page).toHaveScreenshot("mismatch.png");
 
   // take screenshots in both light and dark mode
   // one screenshot per feature
 });
 
+test("new", async ({ page }) => {
+  test.skip(isBaselineRun, "Gets no baseline, so the compare run reports it as new");
+  await page.goto(htmlUrl);
+  await expect(page).toHaveScreenshot("new.png");
+});
+
 // TODO:
 // 1. cover a snapshot that is not failing
-// 2. failing snapshot
-// 3. new snapshot

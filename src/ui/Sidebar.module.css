@@ -14,7 +14,7 @@
     padding-left: 0.75rem;
   }
 
-  span {
+  li > span {
     display: block;
     margin-top: 0.25rem;
     padding: 0.25rem 0.5rem;
@@ -22,12 +22,11 @@
   }
 
   a {
-    display: block;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     color: var(--fg-muted);
 
     &:hover {
@@ -39,5 +38,26 @@
       background: var(--bg-selected);
       color: var(--fg);
     }
+
+    &.overview {
+      margin-bottom: 0.5rem;
+      color: var(--fg);
+      font-weight: 500;
+
+      svg {
+        color: var(--fg-muted);
+      }
+    }
+  }
+
+  .name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .new {
+    font-size: 0.75rem;
   }
 }

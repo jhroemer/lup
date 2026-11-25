@@ -17,7 +17,10 @@
   --bg: var(--gray1);
   --fg: var(--gray12);
   --fg-muted: var(--gray11);
+  --fg-disabled: var(--gray10);
   --bg-subtle: var(--gray2);
+  --bg-inset: var(--gray3);
+  --bg-raised: light-dark(#ffffff, var(--gray5));
   --bg-hover: var(--gray3);
   --bg-selected: var(--gray4);
   --border: var(--gray6);
