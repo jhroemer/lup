@@ -1,6 +1,22 @@
+import type { ScreenshotComparison } from "../types.ts";
+import { NewBadge } from "./NewBadge.tsx";
 import styles from "./OverviewPage.module.css";
 import type { Screenshot } from "./screenshot.ts";
 import { type Mode, screenshotUrl } from "./screenshotUrl.ts";
+
+function KindLabel({ kind }: { kind: ScreenshotComparison["kind"] }) {
+  switch (kind) {
+    case "mismatch":
+      return null;
+    case "missing":
+      return <NewBadge />;
+    case "unstable":
+    case "unrecognized":
+      return <span>{kind}</span>;
+    default:
+      return kind satisfies never;
+  }
+}
 
 export function OverviewPage({ screenshots, mode }: { screenshots: Screenshot[]; mode: Mode }) {
   return (
@@ -17,7 +33,7 @@ export function OverviewPage({ screenshots, mode }: { screenshots: Screenshot[];
             <div class={styles.name}>{comparison.name}</div>
             <div class={styles.details}>
               <span>{test.title}</span>
-              {comparison.kind !== "mismatch" && <span>{comparison.kind}</span>}
+              <KindLabel kind={comparison.kind} />
             </div>
           </a>
         ))}

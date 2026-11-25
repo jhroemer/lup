@@ -60,7 +60,10 @@ export function Sidebar({
                           : undefined
                       }
                     >
-                      {screenshot.comparison.name}
+                      <span class={styles.name}>{screenshot.comparison.name}</span>
+                      {screenshot.comparison.kind === "missing" && (
+                        <span class={styles.new}>New</span>
+                      )}
                     </a>
                   </li>
                 ))}

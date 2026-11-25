@@ -9,6 +9,45 @@
     align-items: center;
     justify-content: space-between;
   }
+
+  button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+  }
+}
+
+.title {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  button {
+    display: flex;
+    border-radius: 999px;
+
+    &:hover > span {
+      border-color: var(--border-hover);
+      background: var(--bg-hover);
+    }
+  }
+}
+
+.tooltip {
+  inset: auto;
+  margin: 6px 0;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.75rem;
+  position-area: bottom;
+  position-try-fallbacks:
+    bottom span-left,
+    bottom span-right;
 }
 
 .modes {
@@ -33,7 +72,8 @@
     }
   }
 
-  a {
+  a,
+  button {
     position: relative;
     padding: 0.125rem 0.625rem;
     color: var(--fg-muted);
@@ -45,6 +85,18 @@
 
     &[aria-current] {
       anchor-name: --selected-mode;
+    }
+
+    &[aria-disabled] {
+      color: var(--fg-disabled);
+
+      &:hover {
+        color: var(--fg-muted);
+      }
+
+      kbd {
+        color: inherit;
+      }
     }
   }
 

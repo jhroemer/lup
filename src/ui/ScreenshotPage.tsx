@@ -1,10 +1,15 @@
 import { useEffect } from "preact/hooks";
 import type { Base64Png, ScreenshotComparison } from "../types.ts";
+import { NewBadge } from "./NewBadge.tsx";
 import type { Screenshot } from "./screenshot.ts";
 import styles from "./ScreenshotPage.module.css";
 import { type Mode, screenshotUrl } from "./screenshotUrl.ts";
 
-function comparisonImages(comparison: ScreenshotComparison): { mode: Mode; png: Base64Png }[] {
+const NO_BASELINE_TOOLTIP_ID = "no-baseline";
+
+function comparisonImages(
+  comparison: ScreenshotComparison,
+): { mode: Mode; png: Base64Png | undefined }[] {
   switch (comparison.kind) {
     case "mismatch":
       return [
@@ -13,10 +18,14 @@ function comparisonImages(comparison: ScreenshotComparison): { mode: Mode; png: 
         { mode: "diff", png: comparison.diff },
       ];
     case "missing":
-      return [{ mode: "actual", png: comparison.actual }];
+      return [
+        { mode: "expected", png: undefined },
+        { mode: "actual", png: comparison.actual },
+        { mode: "diff", png: undefined },
+      ];
     case "unstable":
       return [
-        ...(comparison.expected ? [{ mode: "expected" as const, png: comparison.expected }] : []),
+        { mode: "expected", png: comparison.expected ?? undefined },
         { mode: "previous", png: comparison.previous },
         { mode: "actual", png: comparison.actual },
         { mode: "diff", png: comparison.diff },
@@ -50,7 +59,7 @@ export function ScreenshotPage({
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
       const image = images[Number(event.key) - 1];
-      if (!image) return;
+      if (!image?.png) return;
       event.preventDefault();
       location.replace(screenshotUrl(index, image.mode));
     };
@@ -70,36 +79,63 @@ export function ScreenshotPage({
     );
   }
 
-  const currentImage = images.find((image) => image.mode === mode) ?? {
-    mode: "actual",
-    png: comparison.actual,
-  };
+  const requestedImage = images.find((image) => image.mode === mode);
+  const currentMode = requestedImage?.png ? requestedImage.mode : "actual";
+  const currentPng = requestedImage?.png ?? comparison.actual;
 
   return (
     <div class={styles.page}>
       <header>
-        <h1>{comparison.name}</h1>
-        <div class={styles.modes}>
-          {images.map((image, position) => (
-            <a
-              key={image.mode}
-              href={screenshotUrl(index, image.mode)}
-              aria-current={image.mode === currentImage.mode ? "true" : undefined}
-              aria-keyshortcuts={String(position + 1)}
+        <div class={styles.title}>
+          <h1>{comparison.name}</h1>
+          {comparison.kind === "missing" && (
+            <button
+              type="button"
+              popovertarget={NO_BASELINE_TOOLTIP_ID}
+              aria-describedby={NO_BASELINE_TOOLTIP_ID}
             >
-              {image.mode} <kbd>{position + 1}</kbd>
-            </a>
-          ))}
+              <NewBadge />
+            </button>
+          )}
         </div>
+        <div class={styles.modes}>
+          {images.map((image, position) =>
+            image.png ? (
+              <a
+                key={image.mode}
+                href={screenshotUrl(index, image.mode)}
+                aria-current={image.mode === currentMode ? "true" : undefined}
+                aria-keyshortcuts={String(position + 1)}
+              >
+                {image.mode} <kbd>{position + 1}</kbd>
+              </a>
+            ) : (
+              <button
+                key={image.mode}
+                type="button"
+                aria-disabled="true"
+                popovertarget={NO_BASELINE_TOOLTIP_ID}
+                aria-describedby={NO_BASELINE_TOOLTIP_ID}
+              >
+                {image.mode} <kbd>{position + 1}</kbd>
+              </button>
+            ),
+          )}
+        </div>
+        {images.some((image) => !image.png) && (
+          <div id={NO_BASELINE_TOOLTIP_ID} class={styles.tooltip} popover="hint" role="tooltip">
+            No baseline exists for this screenshot yet.
+          </div>
+        )}
       </header>
       <p class={styles.details}>
         <code>{path}</code>
-        {comparison.kind !== "mismatch" && <span>{comparison.kind}</span>}
+        {comparison.kind === "unstable" && <span>unstable</span>}
       </p>
       <div class={styles.image}>
         <img
-          alt={`${comparison.name} ${currentImage.mode}`}
-          src={`data:image/png;base64,${currentImage.png}`}
+          alt={`${comparison.name} ${currentMode}`}
+          src={`data:image/png;base64,${currentPng}`}
         />
       </div>
     </div>
