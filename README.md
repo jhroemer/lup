@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="120" src="./src/ui/assets/logo.svg" alt="lup logo">
+</p>
+
 # lup-reporter
 
 WIP

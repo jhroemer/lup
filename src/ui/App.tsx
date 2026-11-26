@@ -1,5 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import styles from "./App.module.css";
+import logo from "./assets/logo.svg";
 import { OverviewPage } from "./OverviewPage.tsx";
 import type { Screenshot } from "./screenshot.ts";
 import { ScreenshotPage } from "./ScreenshotPage.tsx";
@@ -21,7 +22,9 @@ export function App({ screenshots }: { screenshots: Screenshot[] }) {
   return (
     <div class={styles.app}>
       <header class={styles.topbar}>
-        <a href="#/">lup</a>
+        <a href="#/">
+          <img src={logo} alt="lup, all screenshots" />
+        </a>
       </header>
       <Sidebar screenshots={screenshots} selected={selected} mode={mode} />
       <main class={styles.main}>

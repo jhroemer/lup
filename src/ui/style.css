@@ -23,8 +23,8 @@
   --bg-raised: light-dark(#ffffff, var(--gray5));
   --bg-hover: var(--gray3);
   --bg-selected: var(--gray4);
-  --border: var(--gray6);
-  --border-hover: var(--gray8);
+  --border: var(--gray5);
+  --border-hover: var(--gray7);
   --accent: light-dark(#5b5bd6, #9e9eff);
 }
 

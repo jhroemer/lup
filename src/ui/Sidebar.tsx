@@ -35,10 +35,10 @@ export function Sidebar({
         <li>
           <a class={styles.overview} href="#/" aria-current={selected ? undefined : "page"}>
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true">
-              <rect x="1" y="1" width="6" height="6" rx="1.5" />
-              <rect x="9" y="1" width="6" height="6" rx="1.5" />
-              <rect x="1" y="9" width="6" height="6" rx="1.5" />
-              <rect x="9" y="9" width="6" height="6" rx="1.5" />
+              <rect x="1" y="1" width="6" height="6" rx="2" />
+              <rect x="9" y="1" width="6" height="6" rx="2" />
+              <rect x="1" y="9" width="6" height="6" rx="2" />
+              <rect x="9" y="9" width="6" height="6" rx="2" />
             </svg>
             All screenshots
           </a>
