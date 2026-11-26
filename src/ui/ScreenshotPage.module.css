@@ -40,7 +40,7 @@
   margin: 6px 0;
   padding: 0.25rem 0.5rem;
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--fg);
   color: var(--bg);
   font-size: 0.75rem;
@@ -54,7 +54,7 @@
   position: relative;
   display: flex;
   padding: 2px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--bg-inset);
 
   &::before {
@@ -62,7 +62,7 @@
     position-anchor: --selected-mode;
     inset: anchor(top) anchor(right) anchor(bottom) anchor(left);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-raised);
     content: "";
     transition: inset 200ms cubic-bezier(0.32, 0.72, 0, 1);
@@ -127,7 +127,7 @@
   flex: 1;
   min-height: 0;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--bg-inset);
 
   img {
