@@ -7,10 +7,25 @@
 
 .topbar {
   grid-column: 1 / -1;
-  padding: 0.625rem 1rem;
+  padding: 0.5625rem 1rem;
   border-bottom: 1px solid var(--border);
   background: var(--bg-subtle);
-  font-weight: 600;
+  display: flex;
+
+  a {
+    opacity: 0.8;
+    transition: opacity 200ms;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+    }
+  }
+
+  img {
+    display: block;
+    height: 1.5rem;
+  }
 }
 
 .main {
