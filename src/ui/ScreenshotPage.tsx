@@ -2,6 +2,7 @@ import { useEffect } from "preact/hooks";
 import type { Base64Png, ScreenshotComparison } from "../types.ts";
 import { NewBadge } from "./NewBadge.tsx";
 import type { Screenshot } from "./screenshot.ts";
+import { ScreenshotImage } from "./ScreenshotImage.tsx";
 import styles from "./ScreenshotPage.module.css";
 import { type Mode, screenshotUrl } from "./screenshotUrl.ts";
 
@@ -132,12 +133,10 @@ export function ScreenshotPage({
         <code>{path}</code>
         {comparison.kind === "unstable" && <span>unstable</span>}
       </p>
-      <div class={styles.image}>
-        <img
-          alt={`${comparison.name} ${currentMode}`}
-          src={`data:image/png;base64,${currentPng}`}
-        />
-      </div>
+      <ScreenshotImage
+        alt={`${comparison.name} ${currentMode}`}
+        src={`data:image/png;base64,${currentPng}`}
+      />
     </div>
   );
 }
