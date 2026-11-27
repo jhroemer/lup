@@ -1,0 +1,179 @@
+@property --zoom {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 4;
+}
+
+.image {
+  position: relative;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
+  padding: 1rem 1rem 1rem 3.5rem;
+  border-radius: 10px;
+  background: var(--bg-inset);
+  transition: --zoom 200ms cubic-bezier(0.32, 0.72, 0, 1);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.controls {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-raised);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+
+  button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--fg-muted);
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+
+    &:first-child {
+      border-radius: 7px 7px 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 7px 7px;
+    }
+
+    & + button {
+      border-top: 1px solid var(--border);
+    }
+
+    &:hover {
+      background: var(--bg-hover);
+      color: var(--fg);
+    }
+
+    &[aria-pressed="true"] {
+      background: var(--bg-selected);
+      color: var(--fg);
+    }
+
+    &:hover > .shortcuts,
+    &:focus-visible > .shortcuts {
+      opacity: 1;
+      transition-delay: 400ms;
+    }
+  }
+
+  svg {
+    width: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.5;
+  }
+}
+
+.shortcuts {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 0.5rem);
+  z-index: 1;
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  padding: 0.25rem 0.375rem 0.25rem 0.5rem;
+  border-radius: 8px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  translate: 0 -50%;
+  transition: opacity 100ms;
+  pointer-events: none;
+
+  span {
+    margin-left: 0.5rem;
+  }
+
+  kbd {
+    box-sizing: border-box;
+    min-width: 1.125rem;
+    padding: 0 0.25rem;
+    border-radius: 4px;
+    background: color-mix(in srgb, currentColor 18%, transparent);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    text-align: center;
+  }
+}
+
+.loupe {
+  --pixel-size: calc(var(--zoom) * 1px);
+  --center: calc(var(--loupe-size) / 2);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: var(--loupe-size);
+  height: var(--loupe-size);
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--bg-inset);
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 4px rgb(0 0 0 / 0.25),
+    0 12px 32px rgb(0 0 0 / 0.35);
+  translate: calc(var(--pointer-x) - 50%) calc(var(--pointer-y) - 50%);
+  pointer-events: none;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(var(--image-width) * var(--pixel-size));
+    max-width: none;
+    image-rendering: pixelated;
+    translate: calc(var(--center) - (var(--pixel-x) + 0.5) * var(--pixel-size))
+      calc(var(--center) - (var(--pixel-y) + 0.5) * var(--pixel-size));
+  }
+
+  &[data-grid]::before,
+  &[data-grid]::after {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    content: "";
+  }
+
+  &[data-grid]::before {
+    background-image:
+      linear-gradient(to right, rgb(128 128 128 / 0.3) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(128 128 128 / 0.3) 1px, transparent 1px);
+    background-position: calc(var(--center) - var(--pixel-size) / 2)
+      calc(var(--center) - var(--pixel-size) / 2);
+    background-size: var(--pixel-size) var(--pixel-size);
+  }
+
+  &[data-grid]::after {
+    width: var(--pixel-size);
+    height: var(--pixel-size);
+    margin: auto;
+    box-shadow:
+      0 0 0 1px #fff,
+      0 0 0 2px #000;
+  }
+}
